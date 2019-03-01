@@ -1,0 +1,51 @@
+---
+###########
+#
+# Overview: Disable Transparent HughPages (THP)
+# Applies to: cas1, cas2, cas3, dataops, and oracle
+# Description: 
+#   This ansible playbook will add Unit file with script that will disable THP.
+# 
+# Prerequisites:
+#   - Linux OS
+#
+# Author:
+#   Mike Ellis 2/14/2019 (Leidos)
+###########
+
+- hosts: gsmoqaint
+  remote_user: srvc-gsmo
+  sudo: yes
+
+  tasks:
+  - name: Ansible create file if it doesn't exist 
+    file:
+      path: "/etc/systemd/system/disable-thp.service"
+      state: touch
+      mode: 0644
+      owner: root
+
+  - name: insert content to create the service to disable THP
+    blockinfile:
+      path: /etc/systemd/system/disable-thp.service
+      block: |
+         [Unit]
+          Description=Disable Transparent Huge Pages (THP)
+
+         [Service]
+         Type=simple
+         ExecStart=/bin/sh -c "echo 'never' > /sys/kernel/mm/transparent_hugepage/enabled && echo 'never' > /sys/kernel/mm/transparent_hugepage/defrag"
+
+         [Install]
+         WantedBy=multi-user.target
+
+
+  - name: Reload the daemon
+    command: sudo systemctl daemon-reload
+
+  - name: Start the service
+    command: sudo systemctl start disable-thp
+
+  - name: enable for boot up
+    command: sudo systemctl enable disable-thp
+

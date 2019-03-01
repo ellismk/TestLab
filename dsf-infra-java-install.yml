@@ -1,0 +1,12 @@
+# Install the Java JRE on the GSMO Target servers
+- hosts: gsmd-ag9-web1
+
+  become: yes
+  become_method: sudo
+
+  vars:
+    artifactory_controller_cache: /tmp/artifactory_cache
+
+  roles:
+  - role: dsf-infra-java
+

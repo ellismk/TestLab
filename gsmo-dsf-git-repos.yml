@@ -1,0 +1,31 @@
+# Playbook to download the git repos to the Ansible Master in order to install other playbooks
+- hosts: localhost 
+
+  become: yes
+  become_method: sudo
+
+  vars_prompt: 
+    - name: "githubuser" 
+      prompt: "Enter your github username" 
+      private: no 
+    - name: "githubpassword" 
+      prompt: "Enter your github password" 
+      private: yes
+
+
+  tasks:
+
+# Example git checkout from Ansible Playbooks
+  - git:
+      repo: 'https://{{ githubuser }}:{{ githubpassword }}@bitbucket.sdosandbox.leidos.com/scm/gsmodsf/dsf-infra-base'
+      dest: /home/srvc-gsmo/playbooks/roles/dsf-infra-base
+
+  - git:
+      repo: 'https://{{ githubuser }}:{{ githubpassword }}@bitbucket.sdosandbox.leidos.com/scm/gsmodsf/dsf-infra-artifacts'
+      dest: /home/srvc-gsmo/playbooks/roles/dsf-infra-artifacts
+
+  - git:
+      repo: 'https://{{ githubuser }}:{{ githubpassword }}@bitbucket.sdosandbox.leidos.com/scm/gsmodsf/dsf-infra-java'
+      dest: /home/srvc-gsmo/playbooks/roles/dsf-infra-java
+
+
