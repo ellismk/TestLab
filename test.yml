@@ -1,5 +1,5 @@
 # Example that prints the loopback address and gateway for each host
-- hosts: all
+- hosts: localhost
   tasks:
 
   - name: Host Information
