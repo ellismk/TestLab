@@ -1,5 +1,5 @@
 # Example that prints the loopback address and gateway for each host
-- hosts: gsmodevint, gsmoqa
+- hosts: all
   tasks:
 
   - name: Host Information
